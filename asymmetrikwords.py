@@ -12,6 +12,8 @@ class WordTree():
 
     # Base method that gets the recursive agorithm to the correct starting point
     def getWords(self, fragment):
+        fragment = fragment.lower()
+
         cur = self
 
         # Iterate through the tree to make cur the end of the fragment
@@ -31,7 +33,7 @@ class WordTree():
         candidates = []
 
         # If "count" is in the dict, this word is a complete word.
-        # As such, add it into the array
+        # As such, add it into the list
         if "count" in self.children:
             candidates.append(Candidate(fragment, self.children["count"]))
 
@@ -65,6 +67,7 @@ class Database():
 
     # Adds a word into the database and increases its count
     def addWord(self, word):
+        word = word.lower()
         cur = self.root
 
         # Iterate through the tree to the end of the word
@@ -98,12 +101,14 @@ class Database():
         for word in refined.split(" "):
             self.addWord(word)
 
-    # Returns the sorted array of anything that begins with the fragment
+    # Returns the sorted list of anything that begins with the fragment
     def getWords(self, fragment):
-        return sorted(self.root.getWords(fragment), key=lambda x: x.confidence, reverse = True)
+        return sorted(self.root.getWords(fragment.lower()), key=lambda x: x.confidence, reverse = True)
 
-    # Prints the array from getWords in a nice human-readable format
+    # Prints the list from getWords in a nice human-readable format
     def printWords(self, fragment):
+        fragment = fragment.lower()
+
         finalString = "\"" + fragment + "\" --> "
 
         candidates = self.getWords(fragment)
@@ -131,3 +136,9 @@ root.printWords("th")
 # Another example to show the database can be updated
 root.train("The thing that I like to think on Thursdays is that Threshes thoroughly thrash themselves.")
 root.printWords("th")
+
+# What if the database doesn't have the word?
+root.printWords("xerneas")
+
+# Print the entire database!
+root.printWords("")
